@@ -40,7 +40,7 @@ public class PanelLibros extends JPanel {
         btnBuscar = new JButton("Buscar");
         btnBuscar.addActionListener(e -> buscarLibros());
 
-        panelBusqueda.add(new JLabel("Buscar por título: "));
+        panelBusqueda.add(new JLabel("Buscar por título, autor, genero o editorial: "));
         panelBusqueda.add(txtBuscar);
         panelBusqueda.add(btnBuscar);
 
@@ -129,7 +129,7 @@ public class PanelLibros extends JPanel {
         modeloTabla.setRowCount(0);
 
         // Buscar libros y agregarlos a la tabla
-        List<Libro> libros = controller.buscarPorTitulo(terminoBusqueda);
+        List<Libro> libros = controller.buscarPorCriterio(terminoBusqueda);
         for (Libro libro : libros) {
             modeloTabla.addRow(new Object[] {
                     libro.getId(),

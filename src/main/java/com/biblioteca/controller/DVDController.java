@@ -15,11 +15,11 @@ public class DVDController extends BibliotecaController<DVD> {
         this.dvdDAO = (DVDDAO) this.dao;
     }
 
-    public List<DVD> buscarPorGenero(String genero) {
+    public List<DVD> buscarPorCriterio(String criterio) {
         try {
-            return dvdDAO.buscarPorGenero(genero);
+            return dvdDAO.buscarPorCriterio(criterio);
         } catch (SQLException e) {
-            System.err.println("Error al buscar DVDs por género: " + e.getMessage());
+            System.err.println("Error al buscar DVDs por criterio: " + e.getMessage());
             return new ArrayList<>();
         }
     }

@@ -31,8 +31,22 @@ public class PanelDVDs extends JPanel {
 
     private void inicializarComponentes() {
         // Panel superior con botones
-        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panelSuperior = new JPanel(new BorderLayout());
 
+        // Panel de busqueda
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel lblBuscar = new JLabel("Buscar DVD por titulo, autor y genero:");
+        JTextField txtBuscar = new JTextField(20);
+        JButton btnBuscar = new JButton("Buscar");
+
+        btnBuscar.addActionListener(e -> buscarDVD(txtBuscar.getText()));
+
+        panelBusqueda.add(lblBuscar);
+        panelBusqueda.add(txtBuscar);
+        panelBusqueda.add(btnBuscar);
+
+        // Panel de acciones
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnAgregar = new JButton("Agregar");
         btnEditar = new JButton("Editar");
         btnEliminar = new JButton("Eliminar");
@@ -43,10 +57,14 @@ public class PanelDVDs extends JPanel {
         btnEliminar.addActionListener(e -> eliminarDVD());
         btnActualizar.addActionListener(e -> actualizarTabla());
 
-        panelSuperior.add(btnAgregar);
-        panelSuperior.add(btnEditar);
-        panelSuperior.add(btnEliminar);
-        panelSuperior.add(btnActualizar);
+
+        panelAcciones.add(btnAgregar);
+        panelAcciones.add(btnEditar);
+        panelAcciones.add(btnEliminar);
+        panelAcciones.add(btnActualizar);
+
+        panelSuperior.add(panelBusqueda, BorderLayout.WEST);
+        panelSuperior.add(panelAcciones, BorderLayout.EAST);
 
         // Tabla y modelo
         modeloTabla = new DefaultTableModel(
@@ -94,6 +112,23 @@ public class PanelDVDs extends JPanel {
             });
         }
     }
+
+    private void buscarDVD(String criterio) {
+        modeloTabla.setRowCount(0); // Limpiar tabla
+
+        List<DVD> dvds = controller.buscarPorCriterio(criterio);
+        for (DVD dvd : dvds) {
+            modeloTabla.addRow(new Object[] {
+                    dvd.getId(),
+                    dvd.getTitulo(),
+                    dvd.getAutor(),
+                    dvd.getAnoPublicacion(),
+                    dvd.getDuracion(),
+                    dvd.getGenero()
+            });
+        }
+    }
+
 
     private void agregarDVD() {
         DialogoAgregarElemento dialogo = new DialogoAgregarElemento(parent, "Agregar DVD", "DVD");

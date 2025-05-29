@@ -135,16 +135,25 @@ public class LibroDAO extends ElementoBibliotecaDAO<Libro> {
         }
     }
 
-    public List<Libro> buscarPorTitulo(String titulo) throws SQLException {
+    public List<Libro> buscarPorCriterio(String criterio) throws SQLException {
         List<Libro> libros = new ArrayList<>();
         String query = "SELECT e.id, e.titulo, e.autor, e.ano_publicacion, " +
                 "l.isbn, l.numero_paginas, l.genero, l.editorial " +
                 "FROM ElementoBiblioteca e " +
                 "JOIN Libro l ON e.id = l.id " +
-                "WHERE e.tipo = 'LIBRO' AND e.titulo LIKE ?";
+                "WHERE e.tipo = 'LIBRO' AND (" +
+                "LOWER(e.titulo) LIKE ? OR " +
+                "LOWER(e.autor) LIKE ? OR " +
+                "LOWER(l.genero) LIKE ? OR " +
+                "LOWER(l.editorial) LIKE ?)";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-            stmt.setString(1, "%" + titulo + "%");
+            String searchPattern = "%" + criterio.toLowerCase() + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     libros.add(new Libro(

@@ -40,7 +40,7 @@ public class PanelRevistas extends JPanel {
         btnBuscar = new JButton("Buscar");
         btnBuscar.addActionListener(e -> buscarRevistas());
 
-        panelBusqueda.add(new JLabel("Buscar por categoría: "));
+        panelBusqueda.add(new JLabel("Buscar por titulo, autor y categoría: "));
         panelBusqueda.add(txtBuscar);
         panelBusqueda.add(btnBuscar);
 
@@ -125,7 +125,7 @@ public class PanelRevistas extends JPanel {
         modeloTabla.setRowCount(0);
 
         // Buscar revistas y agregarlos a la tabla
-        List<Revista> revistas = controller.buscarPorCategoria(terminoBusqueda);
+        List<Revista> revistas = controller.buscarPorCriterio(terminoBusqueda);
         for (Revista revista : revistas) {
             modeloTabla.addRow(new Object[] {
                     revista.getId(),

@@ -127,16 +127,23 @@ public class RevistaDAO extends ElementoBibliotecaDAO<Revista> {
         }
     }
 
-    public List<Revista> buscarPorCategoria(String categoria) throws SQLException {
+    public List<Revista> buscarPorCriterio(String criterio) throws SQLException {
         List<Revista> revistas = new ArrayList<>();
         String query = "SELECT e.id, e.titulo, e.autor, e.ano_publicacion, " +
                 "r.numero_edicion, r.categoria " +
                 "FROM ElementoBiblioteca e " +
                 "JOIN Revista r ON e.id = r.id " +
-                "WHERE e.tipo = 'REVISTA' AND r.categoria LIKE ?";
+                "WHERE e.tipo = 'REVISTA' AND (" +
+                "LOWER(e.titulo) LIKE ? OR " +
+                "LOWER(e.autor) LIKE ? OR " +
+                "LOWER(r.categoria) LIKE ?)";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-            stmt.setString(1, "%" + categoria + "%");
+            String searchPattern = "%" + criterio.toLowerCase() + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     revistas.add(new Revista(

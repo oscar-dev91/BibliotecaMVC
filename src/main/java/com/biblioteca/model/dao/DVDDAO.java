@@ -127,16 +127,23 @@ public class DVDDAO extends ElementoBibliotecaDAO<DVD> {
         }
     }
 
-    public List<DVD> buscarPorGenero(String genero) throws SQLException {
+    public List<DVD> buscarPorCriterio(String criterio) throws SQLException {
         List<DVD> dvds = new ArrayList<>();
         String query = "SELECT e.id, e.titulo, e.autor, e.ano_publicacion, " +
                 "d.duracion, d.genero " +
                 "FROM ElementoBiblioteca e " +
                 "JOIN DVD d ON e.id = d.id " +
-                "WHERE e.tipo = 'DVD' AND d.genero LIKE ?";
+                "WHERE e.tipo = 'DVD' AND (" +
+                "LOWER(e.titulo) LIKE ? OR " +
+                "LOWER(e.autor) LIKE ? OR " +
+                "LOWER(d.genero) LIKE ?)";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-            stmt.setString(1, "%" + genero + "%");
+            String patron = "%" + criterio.toLowerCase() + "%";
+            stmt.setString(1, patron);
+            stmt.setString(2, patron);
+            stmt.setString(3, patron);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     dvds.add(new DVD(

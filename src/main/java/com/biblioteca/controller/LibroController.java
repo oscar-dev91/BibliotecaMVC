@@ -15,11 +15,11 @@ public class LibroController extends BibliotecaController<Libro> {
         this.libroDAO = (LibroDAO) this.dao;
     }
 
-    public List<Libro> buscarPorTitulo(String titulo) {
+    public List<Libro> buscarPorCriterio(String texto) {
         try {
-            return libroDAO.buscarPorTitulo(titulo);
+            return libroDAO.buscarPorCriterio(texto);
         } catch (SQLException e) {
-            System.err.println("Error al buscar libros por título: " + e.getMessage());
+            System.err.println("Error al buscar libros por criterio: " + e.getMessage());
             return new ArrayList<>();
         }
     }

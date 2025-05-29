@@ -15,11 +15,11 @@ public class RevistaController extends BibliotecaController<Revista> {
         this.revistaDAO = (RevistaDAO) this.dao;
     }
 
-    public List<Revista> buscarPorCategoria(String categoria) {
+    public List<Revista> buscarPorCriterio(String criterio) {
         try {
-            return revistaDAO.buscarPorCategoria(categoria);
+            return revistaDAO.buscarPorCriterio(criterio);
         } catch (SQLException e) {
-            System.err.println("Error al buscar revistas por categoría: " + e.getMessage());
+            System.err.println("Error al buscar revistas por criterio: " + e.getMessage());
             return new ArrayList<>();
         }
     }

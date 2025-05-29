@@ -35,5 +35,5 @@ CREATE TABLE Revista (
      id INT PRIMARY KEY,
      numero_edicion INT NOT NULL,
      categoria VARCHAR(100),
-     FOREIGN KEY (id) REFERENCES ElementoBiblioteca(id)
+     FOREIGN KEY (id) REFERENCES ElementoBiblioteca(id) ON DELETE CASCADE
 );
